@@ -46,3 +46,6 @@ app.*.map.json
 
 # Local API keys (never commit)
 /lib/api_keys.dart
+
+# Firebase CLI local cache (deploy config firebase.json/.firebaserc is committed)
+/.firebase/

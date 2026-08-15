@@ -1,11 +1,11 @@
 {
-    "name": "expiry_tracker",
-    "short_name": "expiry_tracker",
+    "name": "Expiry Tracker",
+    "short_name": "Expiry Tracker",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#F4F6F8",
+    "theme_color": "#00897B",
+    "description": "Track medicine expiry dates, search the catalog and identify products by barcode.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

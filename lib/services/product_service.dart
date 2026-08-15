@@ -15,4 +15,14 @@ class ProductService {
                 Product.fromMap(doc.id, doc.data() as Map<String, dynamic>))
             .toList());
   }
+
+  Future<Product?> findByBarcode(String barcode) async {
+    final snap =
+        await _products.where('barcode', isEqualTo: barcode).limit(1).get();
+    if (snap.docs.isEmpty) return null;
+    return Product.fromMap(
+      snap.docs.first.id,
+      snap.docs.first.data() as Map<String, dynamic>,
+    );
+  }
 }

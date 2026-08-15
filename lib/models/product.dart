@@ -10,6 +10,13 @@ class Product {
   final String? uses;
   final String? dosage;
   final String? imageUrl;
+  final String? genericName;
+  final String? composition;
+  final String? packSize;
+  final String? batchNumber;
+  final double? price;
+  final String? verificationSource;
+  final DateTime? verifiedAt;
 
   const Product({
     required this.id,
@@ -21,6 +28,13 @@ class Product {
     this.uses,
     this.dosage,
     this.imageUrl,
+    this.genericName,
+    this.composition,
+    this.packSize,
+    this.batchNumber,
+    this.price,
+    this.verificationSource,
+    this.verifiedAt,
   });
 
   int get daysRemaining =>
@@ -40,6 +54,13 @@ class Product {
       uses: (map['uses'] as String?) ?? (map['usage'] as String?),
       dosage: map['dosage'] as String?,
       imageUrl: map['imageUrl'] as String?,
+      genericName: map['genericName'] as String?,
+      composition: map['composition'] as String?,
+      packSize: map['packSize'] as String?,
+      batchNumber: map['batchNumber'] as String?,
+      price: (map['price'] as num?)?.toDouble(),
+      verificationSource: map['verificationSource'] as String?,
+      verifiedAt: (map['verifiedAt'] as Timestamp?)?.toDate(),
     );
   }
 }

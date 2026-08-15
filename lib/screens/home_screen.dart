@@ -4,6 +4,7 @@ import '../models/product.dart';
 import '../services/product_service.dart';
 import '../utils/product_visuals.dart';
 import 'product_detail_screen.dart';
+import 'scan_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +15,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _productService = ProductService();
-  String _query = '';
 
   @override
   Widget build(BuildContext context) {
@@ -30,43 +30,19 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           final all = snapshot.data ?? [];
-          var products = all;
-          if (_query.isNotEmpty) {
-            final q = _query.toLowerCase();
-            products = products
-                .where((p) => p.name.toLowerCase().contains(q))
-                .toList();
-          }
+          final products = all;
 
           return Column(
             children: [
-              const _Header(),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: TextField(
-                  onChanged: (v) => setState(() => _query = v),
-                  decoration: InputDecoration(
-                    hintText: 'Search products...',
-                    prefixIcon: const Icon(Icons.search),
-                    suffixIcon: _query.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            onPressed: () => setState(() => _query = ''),
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
+              _Header(
+                onIdentifyTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ScanScreen()),
                 ),
               ),
               Expanded(
                 child: products.isEmpty
-                    ? _EmptyState(isSearch: _query.isNotEmpty)
+                    ? const _EmptyState()
                     : ListView.builder(
                         padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
                         itemCount: products.length,
@@ -92,7 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header();
+  const _Header({this.onIdentifyTap});
+
+  final VoidCallback? onIdentifyTap;
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +105,11 @@ class _Header extends StatelessWidget {
                 ),
               ),
               const Spacer(),
+              IconButton(
+                icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+                tooltip: 'Scan barcode with camera',
+                onPressed: onIdentifyTap,
+              ),
             ],
           ),
           const SizedBox(height: 4),
@@ -141,9 +124,7 @@ class _Header extends StatelessWidget {
 }
 
 class _EmptyState extends StatelessWidget {
-  const _EmptyState({required this.isSearch});
-
-  final bool isSearch;
+  const _EmptyState();
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +132,7 @@ class _EmptyState extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(32),
         child: Text(
-          isSearch ? 'No matching products' : 'Catalog is empty.\nCheck back later.',
+          'Catalog is empty.\nCheck back later.',
           textAlign: TextAlign.center,
           style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
         ),
@@ -175,10 +156,10 @@ class _ProductCard extends StatelessWidget {
       badgeColor = Colors.grey.shade500;
       badgeText = 'EXPIRED';
     } else if (days < 3) {
-      badgeColor = Colors.orange;
+      badgeColor = const Color(0xFFE53935);
       badgeText = '$days day${days == 1 ? '' : 's'} left!';
     } else if (days < 7) {
-      badgeColor = const Color(0xFFE53935);
+      badgeColor = Colors.orange;
       badgeText = '$days days left';
     } else {
       badgeColor = const Color(0xFF43A047);
