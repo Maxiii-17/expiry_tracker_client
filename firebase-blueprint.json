@@ -1,0 +1,107 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "Medicine or grocery product tracked for expiration and barcode identification.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique product identifier."
+        },
+        "name": {
+          "type": "string",
+          "description": "Product / Medicine brand name.",
+          "maxLength": 200
+        },
+        "expiryDate": {
+          "type": "string",
+          "description": "Expiry date in ISO or YYYY-MM-DD format.",
+          "maxLength": 30
+        },
+        "category": {
+          "type": "string",
+          "enum": ["medicine", "grocery"],
+          "description": "Product category."
+        },
+        "quantity": {
+          "type": "number",
+          "description": "Stock count in inventory."
+        },
+        "barcode": {
+          "type": "string",
+          "description": "GTIN or barcode string.",
+          "maxLength": 64
+        },
+        "uses": {
+          "type": "string",
+          "description": "Medical indications or uses.",
+          "maxLength": 1000
+        },
+        "dosage": {
+          "type": "string",
+          "description": "Dosage instructions.",
+          "maxLength": 500
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "Packaging image URL or path.",
+          "maxLength": 500
+        },
+        "genericName": {
+          "type": "string",
+          "description": "Generic medicine chemical name.",
+          "maxLength": 200
+        },
+        "composition": {
+          "type": "string",
+          "description": "Chemical composition details.",
+          "maxLength": 500
+        },
+        "packSize": {
+          "type": "string",
+          "description": "Pack size (e.g. 10 Tablets).",
+          "maxLength": 100
+        },
+        "batchNumber": {
+          "type": "string",
+          "description": "Lot / Batch number.",
+          "maxLength": 64
+        },
+        "price": {
+          "type": "number",
+          "description": "MRP in INR."
+        },
+        "manufacturer": {
+          "type": "string",
+          "description": "Manufacturer pharma company.",
+          "maxLength": 200
+        },
+        "verificationSource": {
+          "type": "string",
+          "description": "Source of verification (e.g. gs1-verified).",
+          "maxLength": 64
+        },
+        "verifiedAt": {
+          "type": "string",
+          "description": "Date verified with GS1.",
+          "maxLength": 30
+        },
+        "userId": {
+          "type": "string",
+          "description": "Creator user UID if logged in.",
+          "maxLength": 128
+        }
+      },
+      "required": ["name", "expiryDate", "category", "quantity"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": {
+        "$ref": "Product"
+      },
+      "description": "Collection of medicines and tracked products."
+    }
+  }
+}

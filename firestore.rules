@@ -1,0 +1,42 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidProduct(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 200 &&
+             data.expiryDate is string && data.expiryDate.size() <= 30 &&
+             data.category in ['medicine', 'grocery'] &&
+             data.quantity is number && data.quantity >= 0 &&
+             (!('barcode' in data) || (data.barcode is string && data.barcode.size() <= 64)) &&
+             (!('uses' in data) || (data.uses is string && data.uses.size() <= 1000)) &&
+             (!('dosage' in data) || (data.dosage is string && data.dosage.size() <= 500)) &&
+             (!('imageUrl' in data) || (data.imageUrl is string && data.imageUrl.size() <= 500)) &&
+             (!('genericName' in data) || (data.genericName is string && data.genericName.size() <= 200)) &&
+             (!('composition' in data) || (data.composition is string && data.composition.size() <= 500)) &&
+             (!('packSize' in data) || (data.packSize is string && data.packSize.size() <= 100)) &&
+             (!('batchNumber' in data) || (data.batchNumber is string && data.batchNumber.size() <= 64)) &&
+             (!('price' in data) || data.price is number) &&
+             (!('manufacturer' in data) || (data.manufacturer is string && data.manufacturer.size() <= 200)) &&
+             (!('verificationSource' in data) || (data.verificationSource is string && data.verificationSource.size() <= 64)) &&
+             (!('verifiedAt' in data) || (data.verifiedAt is string && data.verifiedAt.size() <= 30)) &&
+             (!('userId' in data) || (data.userId is string && data.userId.size() <= 128));
+    }
+
+    // Products collection for expiry tracking and catalog
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update: if isValidId(productId) && isValidProduct(request.resource.data);
+      allow delete: if isValidId(productId);
+    }
+  }
+}

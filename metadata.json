@@ -1,0 +1,10 @@
+{
+  "name": "Expiry Tracker",
+  "description": "Track medicine expiry dates, search the catalog, and identify products by barcode with GS1 verification.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
